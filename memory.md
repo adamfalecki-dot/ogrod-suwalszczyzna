@@ -1,3 +1,3 @@
 # Pamięć ogrodu — sezon 2026
 
-Test sync z telefonu.
+Test sync z Make webhook.
