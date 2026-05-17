@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sync memory.md</title>
+<style>
+  body { font-family: system-ui; max-width: 600px; margin: 2rem auto; padding: 0 1rem; background: #1a1a2e; color: #e0e0e0; }
+  h1 { font-size: 1.3rem; color: #7bed9f; }
+  textarea { width: 100%; height: 50vh; background: #16213e; color: #e0e0e0; border: 1px solid #0f3460; border-radius: 8px; padding: 12px; font-family: monospace; font-size: 14px; resize: vertical; }
+  button { width: 100%; padding: 14px; margin-top: 12px; background: #7bed9f; color: #1a1a2e; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; }
+  button:active { background: #5dba7d; }
+  #status { margin-top: 12px; padding: 10px; border-radius: 8px; text-align: center; display: none; }
+  .ok { background: #1b4332; color: #7bed9f; display: block !important; }
+  .err { background: #4a1526; color: #ff6b6b; display: block !important; }
+  p { font-size: 0.85rem; color: #888; }
+</style>
+</head>
+<body>
+<h1>Sync memory.md</h1>
+<p>Wklej zaktualizowaną treść memory.md od Claude i kliknij Sync.</p>
+<textarea id="content" placeholder="# Pamięć ogrodu — sezon 2026..."></textarea>
+<button onclick="sync()">Sync do GitHub</button>
+<div id="status"></div>
+<script>
+async function sync() {
+  const s = document.getElementById('status');
+  const c = document.getElementById('content').value.trim();
+  if (!c) { s.className = 'err'; s.textContent = 'Wklej treść!'; return; }
+  s.className = ''; s.style.display = 'block'; s.textContent = 'Wysyłam...';
+  try {
+    const r = await fetch('https://hook.eu2.make.com/b9b7qetec8l2gdblmiv1tg9vcdtlugyg', {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({content: c})
+    });
+    if (r.ok) { s.className = 'ok'; s.textContent = 'Zsynchronizowano z GitHub.'; }
+    else { s.className = 'err'; s.textContent = 'Błąd: ' + r.status; }
+  } catch(e) { s.className = 'err'; s.textContent = 'Błąd sieci: ' + e.message; }
+}
+</script>
+</body>
+</html>
